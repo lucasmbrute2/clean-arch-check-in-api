@@ -1,11 +1,10 @@
 import { SignUpController } from "./signup"
 import { MissingParamError, InvalidParamError, ServerError } from "../errors"
 import { EmailValidator, } from "../protocols"
+import { AddAccount, AddAccountModel } from "../../domain/use-cases/add-account"
+import { AccountModel } from "../../domain/models/account"
 
-interface SutTypes {
-	sut: SignUpController
-	emailValidatorStub: EmailValidator
-}
+
 
 const makeEmailValidator = (): EmailValidator => {
 	class EmailValidatorStub implements EmailValidator { //um tipo de mock que existe
@@ -18,11 +17,35 @@ const makeEmailValidator = (): EmailValidator => {
 	return new EmailValidatorStub()
 }
 
+const makeAddAccount = (): AddAccount => {
+	class AddAccountStub implements AddAccount {
+		add(account: AddAccountModel): AccountModel {
+			const fakeAccount = {
+				id: 'valid-id',
+				name: 'valid-name',
+				email: 'valid-email@gmail.com',
+				password: 'valid-password'
+			}
+			return fakeAccount
+		}
+	}
+
+	return new AddAccountStub()
+}
+
+interface SutTypes {
+	sut: SignUpController
+	emailValidatorStub: EmailValidator
+	addAccountStub: AddAccount
+}
+
 const makeSut = (): SutTypes => {
 	const emailValidatorStub = makeEmailValidator()
+	const addAccountStub = makeAddAccount()
 	return {
-		sut: new SignUpController(emailValidatorStub),
-		emailValidatorStub
+		sut: new SignUpController(emailValidatorStub, addAccountStub),
+		emailValidatorStub,
+		addAccountStub
 	}
 }
 
@@ -119,7 +142,7 @@ describe('Sign Up Controller', () => {
 		expect(httpResponse.body).toEqual(new InvalidParamError('email'))
 	})
 
-	test('Should call email validator with correct email', () => {
+	test('Should call EmailValidator with correct email', () => {
 		const { sut, emailValidatorStub } = makeSut()
 		//utilizando o jest para mockar o retorno da função
 		const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
@@ -154,5 +177,25 @@ describe('Sign Up Controller', () => {
 		const httpResponse = sut.handle(httpRequest)
 		expect(httpResponse.statusCode).toBe(500) // compara o ponteiro dos objetos
 		expect(httpResponse.body).toEqual(new ServerError())
+	})
+
+	test('Should call AddAccount with correct values', () => {
+		const { sut, addAccountStub } = makeSut()
+		const addSpy = jest.spyOn(addAccountStub, 'add')
+
+		const httpRequest = {
+			body: {
+				email: 'invalid_email',
+				name: 'jhon doe',
+				password: '123456',
+				passwordConfirm: '123456'
+			}
+		}
+		sut.handle(httpRequest)
+		expect(addSpy).toHaveBeenCalledWith({
+			email: 'invalid_email',
+			name: 'jhon doe',
+			password: '123456',
+		})
 	})
 })   
