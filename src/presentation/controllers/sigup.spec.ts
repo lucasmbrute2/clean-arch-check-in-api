@@ -14,4 +14,18 @@ describe('Sign Up Controller', () => {
 		expect(httpResponse.statusCode).toBe(400) // compara o ponteiro dos objetos
 		expect(httpResponse.body).toEqual(new Error('Missing param: name'))
 	})
+
+	test('Should return 400 if no email is provided', () => {
+		const sut = new SignUpController()
+		const httpRequest = {
+			body: {
+				name: 'jhon doe',
+				password: '123456',
+				passwordConfirm: '123456'
+			}
+		}
+		const httpResponse = sut.handle(httpRequest)
+		expect(httpResponse.statusCode).toBe(400) // compara o ponteiro dos objetos
+		expect(httpResponse.body).toEqual(new Error('Missing param: email'))
+	})
 })
