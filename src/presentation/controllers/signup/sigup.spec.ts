@@ -1,10 +1,6 @@
 import { SignUpController } from "./signup"
-import { MissingParamError, InvalidParamError, ServerError } from "../errors"
-import { EmailValidator, } from "../protocols"
-import { AddAccount, AddAccountModel } from "../../domain/use-cases/add-account"
-import { AccountModel } from "../../domain/models/account"
-
-
+import { MissingParamError, InvalidParamError, ServerError } from "../../errors"
+import { EmailValidator, AccountModel, AddAccountModel, AddAccount } from "../signup/signup-protocols"
 
 const makeEmailValidator = (): EmailValidator => {
 	class EmailValidatorStub implements EmailValidator { //um tipo de mock que existe
