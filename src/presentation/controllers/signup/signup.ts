@@ -8,7 +8,7 @@ export class SignUpController implements Controller {
     private readonly addAccount: AddAccount
   ) { }
 
-  handle(httpRequest: HttpRequest): HttpResponse {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
 
     try {
       const requiredFields = ['name', 'email', 'password', 'passwordConfirm']
@@ -29,7 +29,7 @@ export class SignUpController implements Controller {
       }
 
       //Neste ponto todos os dados estão validados
-      const account = this.addAccount.add({
+      const account = await this.addAccount.add({
         name,
         email,
         password
