@@ -29,11 +29,16 @@ export class SignUpController implements Controller {
       }
 
       //Neste ponto todos os dados estão validados
-      this.addAccount.add({
+      const account = this.addAccount.add({
         name,
         email,
         password
       })
+
+      return {
+        statusCode: 200,
+        body: account,
+      }
 
     } catch (error) {
       return serverError()
