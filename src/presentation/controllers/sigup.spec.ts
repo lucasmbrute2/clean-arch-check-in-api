@@ -83,6 +83,22 @@ describe('Sign Up Controller', () => {
 		expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirm'))
 	})
 
+	test('Should return 400 if password confirmation fails', () => {
+		const { sut } = makeSut()
+		const httpRequest = {
+			body: {
+				email: 'johndoe@gmail.com',
+				name: 'jhon doe',
+				password: '123456',
+				passwordConfirm: 'invalid-password-confirm'
+
+			}
+		}
+		const httpResponse = sut.handle(httpRequest)
+		expect(httpResponse.statusCode).toBe(400) // compara o ponteiro dos objetos
+		expect(httpResponse.body).toEqual(new InvalidParamError('passwordConfirm'))
+	})
+
 	test('Should return 400 if an invalid email is provided', () => {
 		const { sut, emailValidatorStub } = makeSut()
 		//utilizando o jest para mockar o retorno da função
