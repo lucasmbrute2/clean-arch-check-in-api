@@ -1,6 +1,12 @@
 import bcrypt from "bcrypt"
 import { BcryptAdapter } from "./bcrypt-adapter"
 
+jest.mock("bcrypt", () => ({
+  async hash(): Promise<string> {
+    return Promise.resolve('hash')
+  }
+}))
+
 describe("Bcrypt Adapter", () => {
   test("Should call bcrypt with correct values", async () => {
     const salt = 12
@@ -10,5 +16,17 @@ describe("Bcrypt Adapter", () => {
     await sut.encrypt('any-value')
     //esperamos que a biblioteca seja usada com a string referida
     expect(hashSpy).toHaveBeenCalledWith('any-value', salt)
+  })
+
+  test("Should return a hash on success", async () => {
+    const salt = 12
+    const sut = new BcryptAdapter(salt)
+
+    const hashedPassword = await sut.encrypt('any-value')
+    //não importa como o bcrypt faz o hash, 
+    //apenas se o retorno vai ser igual o retorno da função
+    //ou seja, se o retorno está sendo repassado para o SUT
+    expect(hashedPassword).toBe('hash')
+
   })
 })
