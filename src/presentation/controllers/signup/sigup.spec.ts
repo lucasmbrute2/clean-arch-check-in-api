@@ -226,7 +226,7 @@ describe('Sign Up Controller', () => {
 			}
 		}
 		const httpResponse = await sut.handle(httpRequest)
-		expect(httpResponse.statusCode).toBe(200) // compara o ponteiro dos objetos
+		expect(httpResponse.statusCode).toBe(201) // compara o ponteiro dos objetos
 		expect(httpResponse.body).toEqual({
 			id: 'valid-id',
 			name: 'valid-name',

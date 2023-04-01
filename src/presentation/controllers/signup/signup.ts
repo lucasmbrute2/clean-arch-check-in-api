@@ -1,6 +1,6 @@
 import { HttpRequest, HttpResponse, Controller, EmailValidator, AddAccount } from "../signup/signup-protocols"
 import { InvalidParamError, MissingParamError } from "../../errors"
-import { badRequest, ok, serverError } from "../../helpers/http-helper"
+import { badRequest, created, serverError } from "../../helpers/http-helper"
 
 export class SignUpController implements Controller {
   constructor(
@@ -35,7 +35,7 @@ export class SignUpController implements Controller {
         password
       })
 
-      return ok(account)
+      return created(account)
 
     } catch (error) {
       console.error(error)
