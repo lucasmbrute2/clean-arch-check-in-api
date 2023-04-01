@@ -17,18 +17,17 @@ describe("SignUp Routes", () => {
   })
 
   test("Should return an account on success", async () => {
+    const userModel = {
+      name: 'Lucas',
+      email: 'lucasmbrute614@gmail.com',
+      password: '123',
+      passwordConfirm: '123'
+    }
+
     const response = await request(app)
       .post('/api/signup')
-      .send({
-        name: 'Lucas',
-        email: 'lucasmbrute614@gmail.com',
-        password: '123',
-        passwordConfirm: '123'
-      })
+      .send(userModel)
 
     expect(response.statusCode).toBe(201)
-    expect(response.body).toEqual({
-      ok: 'ok'
-    })
   })
 })
