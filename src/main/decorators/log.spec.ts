@@ -37,15 +37,37 @@ describe("LogController Decorator", () => {
 
     const httpRequest: HttpRequest = {
       body: {
-        name: 'valid-name',
-        email: 'valid-email@gmail.com',
-        password: 'valid-password',
-        passwordConfirm: 'valid-password'
+        name: 'any-name',
+        email: 'any-email@gmail.com',
+        password: 'any-password',
+        passwordConfirm: 'any-password'
       }
     }
     await sut.handle(httpRequest)
 
     //verificar se o Stub foi chamado com os mesmos dados que o Decorator
     expect(handleSpy).toHaveBeenCalledWith(httpRequest)
+  })
+
+  test("Should return the same result of the controller", async () => {
+    const { sut } = makeSut()
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any-name',
+        email: 'any-email@gmail.com',
+        password: 'any-password',
+        passwordConfirm: 'any-password'
+      }
+    }
+    const httpResponse = await sut.handle(httpRequest)
+
+    //verificar se o Stub foi chamado com os mesmos dados que o Decorator
+    expect(httpResponse).toEqual({
+      statusCode: 200,
+      body: {
+        name: 'Lucas'
+      }
+    })
   })
 })
