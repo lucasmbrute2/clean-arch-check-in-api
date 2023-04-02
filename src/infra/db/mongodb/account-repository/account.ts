@@ -10,7 +10,7 @@ export interface AccountDataFromMongoDB extends AddAccountModel {
 
 export class AccountMongoRepository implements AddAccountRepository {
   async add(accountData: AddAccountModel): Promise<AccountModel> {
-    const accountCollection = MongoHelper.getCollection('accounts')
+    const accountCollection = await MongoHelper.getCollection('accounts')
     await accountCollection.insertOne(accountData)
 
     const accountFromMongoDB = accountData as AccountDataFromMongoDB
