@@ -4,6 +4,15 @@ import { HttpRequest } from "../../protocols"
 import { EmailValidator } from "../signup/signup-protocols"
 import { LoginController } from "./login"
 
+const makeFakeRequest = () => (
+  {
+    body: {
+      email: 'any-email@gmail.com',
+      password: 'any-password'
+    }
+  }
+)
+
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
     isValid(email: string): boolean {
@@ -56,14 +65,7 @@ describe("Login Controller", () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
 
-    const httpRequest: HttpRequest = {
-      body: {
-        email: 'any-email@gmail.com',
-        password: 'any-password'
-      }
-    }
-
-    const httpResponse = await sut.handle(httpRequest)
+    const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')))
   })
 
@@ -73,14 +75,7 @@ describe("Login Controller", () => {
     //garantir q internamente o isValid seja chamado pelo SUT
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
 
-    const httpRequest: HttpRequest = {
-      body: {
-        email: 'any-email@gmail.com',
-        password: 'any-password'
-      }
-    }
-
-    await sut.handle(httpRequest)
+    await sut.handle(makeFakeRequest())
     expect(isValidSpy).toHaveBeenCalledWith('any-email@gmail.com')
   })
 })
