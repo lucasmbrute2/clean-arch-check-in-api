@@ -4,7 +4,6 @@ import { badRequest, created, serverError } from "../../helpers/http-helper"
 
 export class SignUpController implements Controller {
   constructor(
-    private readonly emailValidator: EmailValidator,
     private readonly addAccount: AddAccount,
     private readonly validation: Validation
   ) { }
@@ -17,12 +16,6 @@ export class SignUpController implements Controller {
         return badRequest(error)
       }
       const { name, email, password } = httpRequest.body
-
-
-      if (!this.emailValidator.isValid(email)) {
-        return badRequest(new InvalidParamError('email'))
-      }
-
       //Neste ponto todos os dados estão validados
       const account = await this.addAccount.add({
         name,

@@ -17,7 +17,7 @@ export const makeSignUpController = (): Controller => {
 
   // Decorator pattern
   // Faz um wrapper na instância de um objeto, criando uma outra instância da classe que você quer (do mesmo tipo)
-  const signUpController = new SignUpController(emailValidator, addAccountUseCase, makeSignUpValidation())
+  const signUpController = new SignUpController(addAccountUseCase, makeSignUpValidation())
   const logMongoRepository = new LongoMongoRepository()
   return new LogControllerDecorator(signUpController, logMongoRepository)
 }
