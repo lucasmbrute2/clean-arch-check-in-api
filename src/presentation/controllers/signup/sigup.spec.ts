@@ -70,20 +70,6 @@ const makeSut = (): SutTypes => {
 }
 
 describe('Sign Up Controller', () => {
-	test('Should return 400 if password confirmation fails', async () => {
-		const { sut } = makeSut()
-		const httpRequest = {
-			body: {
-				email: 'johndoe@gmail.com',
-				name: 'jhon doe',
-				password: '123456',
-				passwordConfirm: 'invalid-password-confirm'
-			}
-		}
-		const httpResponse = await sut.handle(httpRequest)
-		expect(httpResponse).toEqual(badRequest(new InvalidParamError('passwordConfirm')))
-	})
-
 	test('Should return 400 if an invalid email is provided', async () => {
 		const { sut, emailValidatorStub } = makeSut()
 		//utilizando o jest para mockar o retorno da função
