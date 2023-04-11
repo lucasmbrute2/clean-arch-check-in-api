@@ -3,7 +3,7 @@ import { RequiredFieldValidation } from "../../presentation/helpers/validators/r
 import { ValidationComposite } from "../../presentation/helpers/validators/validation-composite";
 
 export const makeSignUpValidation = (): ValidationComposite => {
-  const validations = ['name', 'email', 'password', 'passwordConfirmation']
+  const validations = ['name', 'email', 'password', 'passwordConfirm']
     .map(validation => new RequiredFieldValidation(validation));
 
   return new ValidationComposite(validations)

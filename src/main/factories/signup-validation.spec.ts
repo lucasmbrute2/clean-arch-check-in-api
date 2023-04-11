@@ -9,7 +9,7 @@ describe("SignUpValidation Factory", () => {
   it("Should call ValidationComposite with all validations", () => {
     makeSignUpValidation()
 
-    const validations = ['name', 'email', 'password', 'passwordConfirmation']
+    const validations = ['name', 'email', 'password', 'passwordConfirm']
       .map(validation => new RequiredFieldValidation(validation));
 
     expect(ValidationComposite).toHaveBeenCalledWith(validations)
